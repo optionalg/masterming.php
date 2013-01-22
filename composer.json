@@ -1,0 +1,19 @@
+{
+    "name": "kevinlebrun/kata-mastermind-php",
+    "description": "Project description",
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "squizlabs/php_codesniffer": "1.*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": {
+            "Mastermind": "src/"
+        }
+    }
+}
