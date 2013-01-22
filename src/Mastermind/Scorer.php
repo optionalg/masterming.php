@@ -4,7 +4,6 @@ namespace Mastermind;
 
 class Scorer
 {
-    protected $isSuccess = false;
     protected $numberOfWellPlacedColors = 0;
     protected $numberOfMisplacedColors = 0;
     protected $secret;
@@ -16,13 +15,25 @@ class Scorer
 
     public function isSuccess()
     {
-        return $this->isSuccess;
+        return $this->numberOfWellPlacedColors === count($this->secret);
     }
 
     public function score(array $code)
     {
-        $this->isSuccess = true;
-        $this->numberOfWellPlacedColors = 0;
+        $this->assertValidCodeLength($code);
+        $this->countMisplacedColors($code);
+        $this->countWellPlacedColors($code);
+    }
+
+    protected function assertValidCodeLength(array $code)
+    {
+        if (count($code) !== count($this->secret)) {
+            throw new \Mastermind\Exception\InvalidCodeLengthException();
+        }
+    }
+
+    protected function countMisplacedColors(array $code)
+    {
         $this->numberOfMisplacedColors = 0;
 
         $remainingColorsCountInSecret = array();
@@ -36,12 +47,6 @@ class Scorer
 
                 $remainingColorsCountInSecret[$this->secret[$i]]++;
                 $remainingColorsInCode[] = $code[$i];
-
-                $this->isSuccess = false;
-            }
-
-            if ($code[$i] === $this->secret[$i]) {
-                $this->numberOfWellPlacedColors++;
             }
         }
 
@@ -49,6 +54,17 @@ class Scorer
             if (array_key_exists($color, $remainingColorsCountInSecret) && $remainingColorsCountInSecret > 0) {
                 $this->numberOfMisplacedColors++;
                 $remainingColorsCountInSecret[$color]--;
+            }
+        }
+    }
+
+    protected function countWellPlacedColors(array $code)
+    {
+        $this->numberOfWellPlacedColors = 0;
+
+        for ($i = 0; $i < count($code); $i++) {
+            if ($code[$i] === $this->secret[$i]) {
+                $this->numberOfWellPlacedColors++;
             }
         }
     }

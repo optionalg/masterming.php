@@ -47,4 +47,12 @@ class ScorerTest extends \PHPUnit_Framework_TestCase
         $this->scorer->score(array(9, 3));
         assertEquals(0, $this->scorer->getNumberOfMisplacedColors());
     }
+
+    /**
+     * @expectedException Mastermind\Exception\InvalidCodeLengthException
+     */
+    public function testFailsWhenCodeLengthIsNotEqualsToSecretLength()
+    {
+        $this->scorer->score(array(1, 2, 3, 4));
+    }
 }
